@@ -37,6 +37,7 @@ app.get("/", async (req: Request, res: Response) => {
     const result = response.data;
 
     const harshAttendance = {
+        Name : "Harsh",
         overallPercentage: result.stdSubAtdDetails.overallPercentage,
         overallPresent : result.stdSubAtdDetails.overallPresent,
         overallLecture : result.stdSubAtdDetails.overallLecture,
