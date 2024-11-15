@@ -2,12 +2,15 @@ import express, { Request, Response } from "express";
 import axios from "axios";
 import qs from "qs";
 import dotenv from "dotenv";
+import path from "path";
 dotenv.config();
 
 const app = express();
 const PORT = 3000;
 
-app.get("/", async (req: Request, res: Response) => {
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get("/api/attendance", async (req: Request, res: Response) => {
   const data = qs.stringify({
     grant_type: "password",
     username: process.env.USERNAME,
@@ -41,18 +44,30 @@ app.get("/", async (req: Request, res: Response) => {
         overallPercentage: result.stdSubAtdDetails.overallPercentage,
         overallPresent : result.stdSubAtdDetails.overallPresent,
         overallLecture : result.stdSubAtdDetails.overallLecture,
-        // attendanceData : result.attendanceData.map((item : any) => {
-        //     return {
-        //         Subject : item.subjectName,
-        //         isAbsent : item.isAbsent === true && item.isAbsent
-        //     }
-        // })
+        Subject : result.stdSubAtdDetails.subjects.map((item : any) => {
+          return {
+            Name : item.name,
+            PercentageAttendance : `${item.percentageAttendance} %`,
+            TotalAttendance : item.totalLeactures,
+            PresentAttendance : item.presentLeactures
+          }
+        }),
+        attendanceData : result.attendanceData.reverse().map((item : any) => {
+            return {
+                Subject : item.subjectName,
+                Absent: new Date(item.absentDate).toLocaleDateString()
+            }
+        }),
     }
     res.status(200).json(harshAttendance);
   } catch (error) {
     console.error("Error fetching data:", error);
     res.status(500).json({ message: "Failed to fetch data", error: error });
   }
+});
+
+app.get("/", (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
