@@ -7,7 +7,7 @@ import Overview from '../components/overview'
 import Subjects from '../components/subjects'
 import Attendance from '../components/attendance'
 import Absences from '../components/absent'
-import Loader from './Loader'
+import FuturisticLoader from './Loader'
 
 interface AttendanceData {
   Name: string
@@ -46,7 +46,7 @@ export default function Dashboard() {
   }, [])
 
   if (!attendanceData) {
-    return <Loader />
+    return <FuturisticLoader />
   }
 
   return (
@@ -60,6 +60,7 @@ export default function Dashboard() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header 
           studentName={attendanceData.Name} 
+          sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
         />
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-card p-6">

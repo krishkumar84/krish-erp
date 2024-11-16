@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 interface HeaderProps {
   studentName: string;
   setSidebarOpen: (open: boolean) => void;
+  sidebarOpen: boolean
 }
 
-export default function Header({ studentName, setSidebarOpen }: HeaderProps) {
+export default function Header({ studentName, setSidebarOpen, sidebarOpen }: HeaderProps) {
   return (
     <header className="bg-[#000000] shadow-md z-10">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -16,7 +17,7 @@ export default function Header({ studentName, setSidebarOpen }: HeaderProps) {
               variant="ghost"
               size="icon"
               className="mr-4 lg:hidden"
-              onClick={() => setSidebarOpen(true)}
+              onClick={() => setSidebarOpen(!sidebarOpen)}
             >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Open sidebar</span>
