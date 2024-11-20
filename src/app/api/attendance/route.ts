@@ -30,7 +30,7 @@ async function fetchAttendance() {
     console.log(config)
     const response = await axios(config);
     // console.log(response)
-    console.log(response.data)
+    // console.log(response.data)
     const result = response.data;
 
     return {
@@ -59,7 +59,9 @@ async function fetchAttendance() {
 export async function GET(req: NextRequest) {
   try {
     const attendanceData = await fetchAttendance();
-    return NextResponse.json(attendanceData);
+    const response = NextResponse.json(attendanceData);
+    response.headers.set("Cache-Control", "no-store, max-age=0");
+    return response;  
   } catch (error: any) {
     console.error(error.message);
     return NextResponse.json(
