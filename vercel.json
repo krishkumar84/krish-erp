@@ -1,0 +1,11 @@
+{
+    "routes": [
+      {
+        "src": "/api/attendance",
+        "headers": {
+          "Cache-Control": "no-store"
+        }
+      }
+    ]
+  }
+  
