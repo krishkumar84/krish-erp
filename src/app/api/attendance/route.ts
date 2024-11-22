@@ -24,6 +24,8 @@ async function fetchAttendance() {
       "X-Rx": process.env.X_RX,
     },
     data: data,
+    cache: "no-store",
+    next : {revalidate:0}
   };
 
   try {
