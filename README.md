@@ -1,37 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AKGEC Attendance Tracker 🚀
 
-## Getting Started
+A custom implementation of the EduMarshal attendance system used by AKGEC (Ajay Kumar Garg Engineering College). This project provides a user-friendly interface to view and track attendance records by leveraging the official EduMarshal APIs.
 
-First, run the development server:
+## Features
 
+- Easy authentication with EduMarshal credentials
+- Detailed subject-wise attendance tracking
+- Clean and intuitive user interface
+- Real-time attendance data synchronization
+- Comprehensive attendance analytics
+
+## Tech Stack
+
+- Next.js 15
+- React
+- TypeScript
+- Tailwind CSS
+
+## Prerequisites
+
+Before running this project, make sure you have:
+
+- Node.js (v18 or higher)
+- npm or yarn
+- Valid EduMarshal credentials (AKGEC student account)
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/akgec-attendance-tracker.git
+cd akgec-attendance-tracker
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Create a `.env.local` file in the root directory:
+```env
+NEXT_PUBLIC_API_BASE_URL=https://akgecerp.edumarshal.com
+```
+
+4. Start the development server:
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## API Integration Guide
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Authentication
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+First, obtain the access token and session details:
 
-## Learn More
+```javascript
+POST https://akgecerp.edumarshal.com/Token
 
-To learn more about Next.js, take a look at the following resources:
+// Request body
+const payload = {
+    grant_type: 'password',
+    username: '<edumarshal username>',
+    password: '<edumarshal password>'
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The response will include:
+- access_token
+- SessionId
+- X_UserId
+- X_Token
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 2. Header Configuration
 
-## Deploy on Vercel
+Set up headers for subsequent API requests:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```javascript
+const headers = {
+    'Cookie': '_ga_P21KD3ESV2=GS1.1.1717220027.3.0.1717220027.0.0.0; _ga=GA1.2.257840654.1716482344; _gid=GA1.2.287587932.1716482344',
+    'Authorization': `Bearer ${access_token}`,
+    'X-Wb': '1',
+    'Sessionid': SessionId,
+    'X-Contextid': '194',
+    'X-Userid': X_UserId,
+    'X_token': X_Token,
+    'X-Rx': '1'
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# krish-erp
+### 3. Available API Endpoints
+
+#### Get User Details
+```javascript
+GET https://akgecerp.edumarshal.com/api/User/GetByUserId/<USER_ID>?y=0
+```
+
+#### Get Attendance Details
+```javascript
+GET https://akgecerp.edumarshal.com/api/SubjectAttendance/GetPresentAbsentStudent
+    ?isDateWise=false
+    &termId=0
+    &userId=<USER_ID>
+    &y=0
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This project is not officially affiliated with AKGEC or EduMarshal. It is a student-made tool to enhance the attendance tracking experience.
+
+## Acknowledgments
+
+- AKGEC for providing the EduMarshal system
+- All contributors who have helped improve this project
+
+---
+**Note**: Remember to never share your EduMarshal credentials or tokens publicly.
